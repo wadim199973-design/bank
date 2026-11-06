@@ -292,6 +292,9 @@ def clickable_metric(label, key, color='#6B2D9D'):
         st.rerun()
 
 # ФУНКЦИЯ ОТОБРАЖЕНИЯ ДЕТАЛЬНОГО АНАЛИЗА
+# ==========================================================
+# ФУНКЦИЯ ОТОБРАЖЕНИЯ ДЕТАЛЬНОГО АНАЛИЗА
+# ==========================================================
 def show_detail_analysis(metric_key, metric_label):
     """Показывает детальный график и статистику для выбранной метрики"""
     
@@ -304,7 +307,7 @@ def show_detail_analysis(metric_key, metric_label):
     </div>
     """, unsafe_allow_html=True)
     
-    #  СТАТИСТИКА 
+    # --- СТАТИСТИКА ---
     latest_val = df_agg[metric_key].iloc[-1]
     prev_val = df_agg[metric_key].iloc[-2] if len(df_agg) > 1 else latest_val
     min_val = df_agg[metric_key].min()
@@ -334,26 +337,20 @@ def show_detail_analysis(metric_key, metric_label):
     
     st.markdown("---")
     
-    # --- ГРАФИК ПО РЕГИОНАМ ---
-    st.markdown("### Динамика показателя по регионам")
+    # --- ГРАФИК ДИНАМИКИ ---
+    st.markdown("### Динамика показателя")
     
     if selected_region == "Все регионы":
-        # Показываем все регионы отдельными линиями
+        # Показываем ОДНУ суммарную линию по всем регионам
         fig_detail = go.Figure()
-        
-        for region in df['region'].unique():
-            region_data = df[df['region'] == region].copy()
-            region_data = region_data.set_index('date')
-            region_agg = region_data.resample(freq)[metric_key].sum().reset_index()
-            region_agg['date_str'] = region_agg['date'].dt.strftime('%d.%m.%Y' if timeframe == "День" else '%b %Y')
-            
-            fig_detail.add_trace(go.Scatter(
-                x=region_agg['date_str'],
-                y=region_agg[metric_key],
-                name=region,
-                mode='lines+markers',
-                marker=dict(size=5)
-            ))
+        fig_detail.add_trace(go.Scatter(
+            x=df_agg['date_str'],
+            y=df_agg[metric_key],
+            name='Сумма по всем регионам',
+            mode='lines+markers',
+            line=dict(color=COLORS['bright_neo'], width=3),
+            marker=dict(size=8, color=COLORS['bright_neo'])
+        ))
         
         fig_detail.update_layout(
             font=dict(family="Helvetica, Arial", size=12),
@@ -361,23 +358,15 @@ def show_detail_analysis(metric_key, metric_label):
             paper_bgcolor='white',
             hovermode="x unified",
             height=500,
-            margin=dict(l=60, r=40, t=60, b=80),
+            margin=dict(l=60, r=40, t=60, b=60),
             xaxis=dict(gridcolor='#E0E0E0', tickfont=dict(family="Helvetica", size=10), tickangle=-45),
-            yaxis=dict(gridcolor='#E0E0E0', title="Сумма (BYN)", tickfont=dict(family="Helvetica", size=11)),
-            legend=dict(
-                orientation="h",
-                yanchor="bottom",
-                y=-0.25,
-                xanchor="center",
-                x=0.5,
-                font=dict(family="Helvetica", size=11)
-            )
+            yaxis=dict(gridcolor='#E0E0E0', title="Сумма (BYN)", tickfont=dict(family="Helvetica", size=11))
         )
         
         st.plotly_chart(fig_detail, use_container_width=True)
         
     else:
-        # Если выбран конкретный регион
+        # Если выбран конкретный регион - показываем только его динамику
         region_data = df[df['region'] == selected_region].copy()
         region_data = region_data.set_index('date')
         region_agg = region_data.resample(freq)[metric_key].sum().reset_index()
@@ -406,7 +395,7 @@ def show_detail_analysis(metric_key, metric_label):
         
         st.plotly_chart(fig_detail, use_container_width=True)
     
-    #ТАБЛИЦА ПО РЕГИОНАМ
+    # --- ТАБЛИЦА ПО РЕГИОНАМ ---
     st.markdown("### Разбивка по регионам (последний период)")
     
     recent_data = df[df['date'] >= df['date'].max() - timedelta(days=30)]
