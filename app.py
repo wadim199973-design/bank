@@ -266,35 +266,37 @@ def calc_delta(latest, prev):
 
 # ФУНКЦИЯ КЛИКАБЕЛЬНОЙ КАРТОЧКИ-МЕТРИКИ
 def clickable_metric(label, key, color='#6B2D9D'):
-    """Создает кликабельную карточку-метрику"""
+    """Создает кликабельную кнопку с информацией под ней"""
     latest_val = df_agg[key].iloc[-1]
     prev_val = df_agg[key].iloc[-2] if len(df_agg) > 1 else latest_val
     delta = calc_delta(latest_val, prev_val)
     
     is_active = st.session_state.selected_metric == key
     
-    # Определяем знак и класс дельты
+    # Определяем знак и цвет дельты
     delta_sign = "+" if delta >= 0 else ""
-    delta_class = "delta-positive" if delta >= 0 else "delta-negative"
+    delta_color = "#00C389" if delta >= 0 else "#F4364C"
     
-    # HTML карточки
-    card_html = f"""
-    <div class="metric-card-container">
-        <div class="metric-card-visual {'active' if is_active else ''}">
-            <div class="card-label">{label}</div>
-            <div class="card-value">{latest_val / 1_000_000:,.1f} млн BYN</div>
-            <div class="card-delta {delta_class}">{delta_sign}{delta:.1f}%</div>
-        </div>
-        <button></button>
-    </div>
-    """
-    
-    # Отображаем карточку
-    st.markdown(card_html, unsafe_allow_html=True)
-    
-    # Невидимая кнопка для клика
+    # Кнопка с названием показателя
     button_key = f"btn_{key}"
-    clicked = st.button("", key=button_key, help="Нажмите для детального анализа")
+    clicked = st.button(
+        label, 
+        key=button_key, 
+        use_container_width=True,
+        help="Нажмите для детального анализа"
+    )
+    
+    # Информация под кнопкой
+    st.markdown(f"""
+    <div style="text-align: center; margin-top: 8px;">
+        <div style="font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; color: #2D1B4E; margin-bottom: 4px;">
+            {latest_val / 1_000_000:,.1f} млн BYN
+        </div>
+        <div style="font-family: 'Helvetica', Arial, sans-serif; font-size: 14px; font-weight: 600; color: {delta_color};">
+            {delta_sign}{delta:.1f}%
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     if clicked:
         st.session_state.selected_metric = key
