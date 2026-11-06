@@ -34,7 +34,7 @@ logo_svg = """
 logo_b64 = base64.b64encode(logo_svg.encode('utf-8')).decode('utf-8')
 logo_data_uri = f"data:image/svg+xml;base64,{logo_b64}"
 
-# Инициализация session_state для хранения выбранной метрики
+# Инициализация session_state
 if 'selected_metric' not in st.session_state:
     st.session_state.selected_metric = None
 if 'selected_metric_label' not in st.session_state:
@@ -49,18 +49,75 @@ st.markdown('<div class="brand-pattern"></div>', unsafe_allow_html=True)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
-    h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', sans-serif !important; font-weight: 700 !important; color: #2D1B4E !important; }
-    .stMarkdown, p, div, label { font-family: 'Helvetica', Arial, sans-serif !important; font-weight: 400 !important; color: #2D1B4E !important; }
-    .main-header { font-family: 'Montserrat', sans-serif !important; font-size: 36px !important; font-weight: 700 !important; color: #2D1B4E !important; margin-top: 10px !important; margin-bottom: 10px !important; }
-    .sub-header { font-family: 'Helvetica', sans-serif !important; font-size: 16px !important; font-weight: 300 !important; color: #6B2D9D !important; margin-bottom: 30px !important; }
-    .stSidebar { background-color: #F8F7FA !important; }
-    .stSidebar h2 { color: #6B2D9D !important; font-family: 'Montserrat', sans-serif !important; }
-    [data-testid="stMetricValue"] { font-family: 'Montserrat', sans-serif !important; font-weight: 700 !important; color: #2D1B4E !important; }
-    [data-testid="stMetricLabel"] { font-family: 'Helvetica', sans-serif !important; font-weight: 400 !important; color: #6B2D9D !important; }
-    .brand-pattern { height: 4px; background: linear-gradient(90deg, #6B2D9D 0%, #7EDDD3 50%, #00C389 100%); margin: 20px 0; border-radius: 2px; }
-    .footer { text-align: center; padding: 20px 0; margin-top: 40px; border-top: 1px solid #E0E0E0; }
     
-    .stTabs [data-baseweb="tab-list"] { gap: 24px; }
+    h1, h2, h3, h4, h5, h6 { 
+        font-family: 'Montserrat', sans-serif !important; 
+        font-weight: 700 !important; 
+        color: #2D1B4E !important; 
+    }
+    
+    .stMarkdown, p, div, label { 
+        font-family: 'Helvetica', Arial, sans-serif !important; 
+        font-weight: 400 !important; 
+        color: #2D1B4E !important; 
+    }
+    
+    .main-header { 
+        font-family: 'Montserrat', sans-serif !important; 
+        font-size: 36px !important; 
+        font-weight: 700 !important; 
+        color: #2D1B4E !important; 
+        margin-top: 10px !important; 
+        margin-bottom: 10px !important; 
+    }
+    
+    .sub-header { 
+        font-family: 'Helvetica', sans-serif !important; 
+        font-size: 16px !important; 
+        font-weight: 300 !important; 
+        color: #6B2D9D !important; 
+        margin-bottom: 30px !important; 
+    }
+    
+    .stSidebar { 
+        background-color: #F8F7FA !important; 
+    }
+    
+    .stSidebar h2 { 
+        color: #6B2D9D !important; 
+        font-family: 'Montserrat', sans-serif !important; 
+    }
+    
+    [data-testid="stMetricValue"] { 
+        font-family: 'Montserrat', sans-serif !important; 
+        font-weight: 700 !important; 
+        color: #2D1B4E !important; 
+    }
+    
+    [data-testid="stMetricLabel"] { 
+        font-family: 'Helvetica', sans-serif !important; 
+        font-weight: 400 !important; 
+        color: #6B2D9D !important; 
+    }
+    
+    .brand-pattern { 
+        height: 4px; 
+        background: linear-gradient(90deg, #6B2D9D 0%, #7EDDD3 50%, #00C389 100%); 
+        margin: 20px 0; 
+        border-radius: 2px; 
+    }
+    
+    .footer { 
+        text-align: center; 
+        padding: 20px 0; 
+        margin-top: 40px; 
+        border-top: 1px solid #E0E0E0; 
+    }
+    
+    .stTabs [data-baseweb="tab-list"] { 
+        gap: 24px; 
+    }
+    
     .stTabs [data-baseweb="tab"] { 
         font-family: 'Montserrat', sans-serif !important; 
         font-weight: 600 !important; 
@@ -70,84 +127,33 @@ st.markdown("""
         border-radius: 8px 8px 0 0 !important;
         padding: 10px 24px !important;
     }
+    
     .stTabs [aria-selected="true"] { 
         background-color: #6B2D9D !important; 
         color: white !important; 
     }
     
-    /* Стили для кликабельных карточек-метрик */
-    div[data-testid="stHorizontalBlock"] > div {
-        padding: 0 !important;
-    }
-    
-    .metric-card {
-        background: linear-gradient(135deg, #F8F7FA 0%, #FFFFFF 100%);
-        border: 2px solid #E0E0E0;
-        border-radius: 12px;
-        padding: 20px;
-        margin: 8px 4px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-align: center;
-    }
-    
-    .metric-card:hover {
-        border-color: #6B2D9D;
-        box-shadow: 0 4px 12px rgba(107, 45, 157, 0.15);
-        transform: translateY(-2px);
-    }
-    
-    .metric-card.active {
-        background: linear-gradient(135deg, #6B2D9D 0%, #2D1B4E 100%);
-        border-color: #6B2D9D;
-        color: white !important;
-    }
-    
-    .metric-card.active .metric-label,
-    .metric-card.active .metric-value,
-    .metric-card.active .metric-delta {
-        color: white !important;
-    }
-    
-    .metric-label {
-        font-family: 'Helvetica', Arial, sans-serif;
-        font-size: 13px;
-        font-weight: 400;
-        color: #6B2D9D;
-        margin-bottom: 8px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .metric-value {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 24px;
-        font-weight: 700;
-        color: #2D1B4E;
-        margin-bottom: 4px;
-    }
-    
-    .metric-delta {
-        font-family: 'Helvetica', Arial, sans-serif;
-        font-size: 14px;
-        font-weight: 600;
-    }
-    
-    .delta-positive { color: #00C389 !important; }
-    .delta-negative { color: #F4364C !important; }
-    
-    /* Скрываем стандартный вид кнопки */
-    button[kind="secondary"] {
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
+    /* Стили для кнопок-метрик */
+    .stButton > button {
+        background: linear-gradient(135deg, #F8F7FA 0%, #FFFFFF 100%) !important;
+        border: 2px solid #E0E0E0 !important;
+        border-radius: 12px !important;
+        padding: 20px !important;
+        margin: 8px 4px !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        text-align: center !important;
         width: 100% !important;
+        font-family: 'Helvetica', Arial, sans-serif !important;
+        color: #2D1B4E !important;
+        font-size: 14px !important;
+        line-height: 1.6 !important;
     }
     
-    button[kind="secondary"]:hover {
-        background: transparent !important;
+    .stButton > button:hover {
+        border-color: #6B2D9D !important;
+        box-shadow: 0 4px 12px rgba(107, 45, 157, 0.15) !important;
+        transform: translateY(-2px) !important;
     }
     
     .detail-section {
@@ -209,7 +215,7 @@ def load_mock_data():
     df = pd.DataFrame(data)
     df['date'] = pd.to_datetime(df['date'])
     
-    # Расчет "Требований к экономике" прямо в коде
+    # Расчет "Требований к экономике"
     df['requirements_to_economy'] = df['corp_loans'] + df['corp_current_accounts'] + df['corp_securities']
     
     return df
@@ -258,37 +264,25 @@ def calc_delta(latest, prev):
     if prev == 0: return 0
     return ((latest - prev) / prev) * 100
 
-# ФУНКЦИЯ КЛИКАБЕЛЬНОЙ МЕТРИКИ-КАРТОЧКИ
+# ==========================================================
+# ФУНКЦИЯ КЛИКАБЕЛЬНОЙ КНОПКИ-МЕТРИКИ
+# ==========================================================
 def clickable_metric(label, key, color='#6B2D9D'):
-    """Создает кликабельную карточку метрики"""
+    """Создает кликабельную кнопку-метрику"""
     latest_val = df_agg[key].iloc[-1]
     prev_val = df_agg[key].iloc[-2] if len(df_agg) > 1 else latest_val
     delta = calc_delta(latest_val, prev_val)
     
-    is_active = st.session_state.selected_metric == key
+    # Определяем знак дельты
+    delta_sign = "+" if delta >= 0 else ""
     
-    # Определяем цвет дельты
-    if key in ['corp_loans', 'corp_current_accounts', 'corp_deposits', 'corp_securities',
-               'retail_loans', 'retail_current_accounts', 'retail_deposits', 'requirements_to_economy']:
-        delta_class = "delta-positive" if delta >= 0 else "delta-negative"
-        delta_sign = "+" if delta >= 0 else ""
-    else:
-        delta_class = "delta-negative" if delta >= 0 else "delta-positive"
-        delta_sign = "+" if delta >= 0 else ""
+    # Формируем текст кнопки
+    button_text = f"{label}\n\n{latest_val / 1_000_000:,.1f} млн BYN\n\n{delta_sign}{delta:.1f}%"
     
-    # HTML карточки
-    card_html = f"""
-    <div class="metric-card {'active' if is_active else ''}">
-        <div class="metric-label">{label}</div>
-        <div class="metric-value">{latest_val / 1_000_000:,.1f} млн</div>
-        <div class="metric-delta {delta_class}">{delta_sign}{delta:.1f}%</div>
-    </div>
-    """
-    
-    # Кнопка-обертка (невидимая, но кликабельная)
+    # Создаем кнопку
     button_key = f"btn_{key}"
     clicked = st.button(
-        card_html, 
+        button_text, 
         key=button_key, 
         use_container_width=True,
         help="Нажмите для детального анализа"
@@ -299,7 +293,9 @@ def clickable_metric(label, key, color='#6B2D9D'):
         st.session_state.selected_metric_label = label
         st.rerun()
 
+# ==========================================================
 # ФУНКЦИЯ ОТОБРАЖЕНИЯ ДЕТАЛЬНОГО АНАЛИЗА
+# ==========================================================
 def show_detail_analysis(metric_key, metric_label):
     """Показывает детальный график и статистику для выбранной метрики"""
     
@@ -345,7 +341,6 @@ def show_detail_analysis(metric_key, metric_label):
     # --- ГРАФИК ПО РЕГИОНАМ ---
     st.markdown("### Динамика показателя по регионам")
     
-    # Для графика по регионам берем исходные данные (до агрегации по регионам)
     if selected_region == "Все регионы":
         # Показываем все регионы отдельными линиями
         fig_detail = go.Figure()
@@ -386,7 +381,7 @@ def show_detail_analysis(metric_key, metric_label):
         st.plotly_chart(fig_detail, use_container_width=True)
         
     else:
-        # Если выбран конкретный регион - показываем только его динамику
+        # Если выбран конкретный регион
         region_data = df[df['region'] == selected_region].copy()
         region_data = region_data.set_index('date')
         region_agg = region_data.resample(freq)[metric_key].sum().reset_index()
@@ -456,13 +451,13 @@ with tab_corp:
         "📊 Требования к экономике": "requirements_to_economy"
     }
     
-    # Создаем кликабельные карточки в строку
+    # Создаем кнопки в строку
     corp_cols = st.columns(len(corp_metrics))
     for i, (label, key) in enumerate(corp_metrics.items()):
         with corp_cols[i]:
             clickable_metric(label, key, COLORS['bright_neo'])
     
-    # Показываем детальный анализ, если выбрана метрика из корп. блока
+    # Показываем детальный анализ
     if st.session_state.selected_metric in corp_metrics.values():
         show_detail_analysis(
             st.session_state.selected_metric, 
@@ -486,7 +481,7 @@ with tab_retail:
         with retail_cols[i]:
             clickable_metric(label, key, COLORS['digital_crimson'])
     
-    # Показываем детальный анализ, если выбрана метрика из розн. блока
+    # Показываем детальный анализ
     if st.session_state.selected_metric in retail_metrics.values():
         show_detail_analysis(
             st.session_state.selected_metric, 
