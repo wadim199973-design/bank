@@ -264,27 +264,37 @@ def calc_delta(latest, prev):
     if prev == 0: return 0
     return ((latest - prev) / prev) * 100
 
-# ФУНКЦИЯ КЛИКАБЕЛЬНОЙ КНОПКИ-МЕТРИКИ
+# ФУНКЦИЯ КЛИКАБЕЛЬНОЙ КАРТОЧКИ-МЕТРИКИ
 def clickable_metric(label, key, color='#6B2D9D'):
-    """Создает кликабельную кнопку-метрику"""
+    """Создает кликабельную карточку-метрику"""
     latest_val = df_agg[key].iloc[-1]
     prev_val = df_agg[key].iloc[-2] if len(df_agg) > 1 else latest_val
     delta = calc_delta(latest_val, prev_val)
     
-    # Определяем знак дельты
+    is_active = st.session_state.selected_metric == key
+    
+    # Определяем знак и класс дельты
     delta_sign = "+" if delta >= 0 else ""
+    delta_class = "delta-positive" if delta >= 0 else "delta-negative"
     
-    # Формируем текст кнопки
-    button_text = f"{label}\n\n{latest_val / 1_000_000:,.1f} млн BYN\n\n{delta_sign}{delta:.1f}%"
+    # HTML карточки
+    card_html = f"""
+    <div class="metric-card-container">
+        <div class="metric-card-visual {'active' if is_active else ''}">
+            <div class="card-label">{label}</div>
+            <div class="card-value">{latest_val / 1_000_000:,.1f} млн BYN</div>
+            <div class="card-delta {delta_class}">{delta_sign}{delta:.1f}%</div>
+        </div>
+        <button></button>
+    </div>
+    """
     
-    # Создаем кнопку
+    # Отображаем карточку
+    st.markdown(card_html, unsafe_allow_html=True)
+    
+    # Невидимая кнопка для клика
     button_key = f"btn_{key}"
-    clicked = st.button(
-        button_text, 
-        key=button_key, 
-        use_container_width=True,
-        help="Нажмите для детального анализа"
-    )
+    clicked = st.button("", key=button_key, help="Нажмите для детального анализа")
     
     if clicked:
         st.session_state.selected_metric = key
@@ -292,9 +302,6 @@ def clickable_metric(label, key, color='#6B2D9D'):
         st.rerun()
 
 # ФУНКЦИЯ ОТОБРАЖЕНИЯ ДЕТАЛЬНОГО АНАЛИЗА
-# ==========================================================
-# ФУНКЦИЯ ОТОБРАЖЕНИЯ ДЕТАЛЬНОГО АНАЛИЗА
-# ==========================================================
 def show_detail_analysis(metric_key, metric_label):
     """Показывает детальный график и статистику для выбранной метрики"""
     
@@ -307,7 +314,7 @@ def show_detail_analysis(metric_key, metric_label):
     </div>
     """, unsafe_allow_html=True)
     
-    # --- СТАТИСТИКА ---
+    #СТАТИСТИКА 
     latest_val = df_agg[metric_key].iloc[-1]
     prev_val = df_agg[metric_key].iloc[-2] if len(df_agg) > 1 else latest_val
     min_val = df_agg[metric_key].min()
@@ -337,7 +344,7 @@ def show_detail_analysis(metric_key, metric_label):
     
     st.markdown("---")
     
-    # --- ГРАФИК ДИНАМИКИ ---
+    #ГРАФИК ДИНАМИКИ
     st.markdown("### Динамика показателя")
     
     if selected_region == "Все регионы":
@@ -395,7 +402,7 @@ def show_detail_analysis(metric_key, metric_label):
         
         st.plotly_chart(fig_detail, use_container_width=True)
     
-    # --- ТАБЛИЦА ПО РЕГИОНАМ ---
+    #ТАБЛИЦА ПО РЕГИОНАМ
     st.markdown("### Разбивка по регионам (последний период)")
     
     recent_data = df[df['date'] >= df['date'].max() - timedelta(days=30)]
