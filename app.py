@@ -4,7 +4,7 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
-
+import base64
 # 1. НАСТРОЙКА СТРАНИЦЫ И ФИРМЕННОГО СТИЛЯ
 st.set_page_config(page_title="Neo Bank Dashboard", layout="wide", page_icon="🏦")
 
@@ -20,7 +20,7 @@ COLORS = {
 }
 
 # SVG логотип Neo Bank
-LOGO_SVG = """
+logo_svg = """
 <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
     <!-- Графический элемент (полумесяц) -->
     <circle cx="45" cy="40" r="35" fill="none" stroke="#6B2D9D" stroke-width="8"/>
@@ -36,6 +36,17 @@ LOGO_SVG = """
     <text x="95" y="68" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B2D9D">be in digital</text>
 </svg>
 """
+
+# Кодируем SVG в base64 для использования в st.image()
+logo_b64 = base64.b64encode(logo_svg.encode('utf-8')).decode('utf-8')
+logo_data_uri = f"data:image/svg+xml;base64,{logo_b64}"
+
+# Отображаем логотип через st.image()
+st.image(logo_data_uri, width=280)
+
+st.markdown('<div class="main-header">Оперативный мониторинг показателей</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-header">Динамика ключевых метрик с детализацией по регионам и периодам</div>', unsafe_allow_html=True)
+st.markdown('<div class="brand-pattern"></div>', unsafe_allow_html=True)
 
 # Кастомный CSS с брендбуком
 st.markdown("""
@@ -328,11 +339,14 @@ with st.expander("📊 Детальные данные"):
 
 # 8. ФУТЕР С ЛОГОТИПОМ
 st.markdown("---")
-st.markdown('<div class="footer">', unsafe_allow_html=True)
-st.markdown(LOGO_SVG, unsafe_allow_html=True)
+
+# Центрируем логотип в футере
+col_left, col_center, col_right = st.columns([1, 2, 1])
+with col_center:
+    st.image(logo_data_uri, width=200)
+
 st.markdown(f"""
-    <div style='font-family: Helvetica; color: {COLORS["bright_neo"]}; font-size: 12px; margin-top: 10px;'>
+    <div style='text-align: center; font-family: Helvetica, Arial, sans-serif; color: {COLORS["bright_neo"]}; font-size: 12px; margin-top: 10px;'>
         Система мониторинга показателей | {datetime.now().strftime('%Y')}
     </div>
 """, unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
