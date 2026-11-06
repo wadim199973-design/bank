@@ -264,9 +264,7 @@ def calc_delta(latest, prev):
     if prev == 0: return 0
     return ((latest - prev) / prev) * 100
 
-# ==========================================================
 # ФУНКЦИЯ КЛИКАБЕЛЬНОЙ КНОПКИ-МЕТРИКИ
-# ==========================================================
 def clickable_metric(label, key, color='#6B2D9D'):
     """Создает кликабельную кнопку-метрику"""
     latest_val = df_agg[key].iloc[-1]
@@ -293,9 +291,7 @@ def clickable_metric(label, key, color='#6B2D9D'):
         st.session_state.selected_metric_label = label
         st.rerun()
 
-# ==========================================================
 # ФУНКЦИЯ ОТОБРАЖЕНИЯ ДЕТАЛЬНОГО АНАЛИЗА
-# ==========================================================
 def show_detail_analysis(metric_key, metric_label):
     """Показывает детальный график и статистику для выбранной метрики"""
     
@@ -308,7 +304,7 @@ def show_detail_analysis(metric_key, metric_label):
     </div>
     """, unsafe_allow_html=True)
     
-    # --- СТАТИСТИКА ---
+    #  СТАТИСТИКА 
     latest_val = df_agg[metric_key].iloc[-1]
     prev_val = df_agg[metric_key].iloc[-2] if len(df_agg) > 1 else latest_val
     min_val = df_agg[metric_key].min()
@@ -410,7 +406,7 @@ def show_detail_analysis(metric_key, metric_label):
         
         st.plotly_chart(fig_detail, use_container_width=True)
     
-    # --- ТАБЛИЦА ПО РЕГИОНАМ ---
+    #ТАБЛИЦА ПО РЕГИОНАМ
     st.markdown("### Разбивка по регионам (последний период)")
     
     recent_data = df[df['date'] >= df['date'].max() - timedelta(days=30)]
@@ -432,14 +428,10 @@ def show_detail_analysis(metric_key, metric_label):
     else:
         st.info(f"📍 Отображаются данные только по региону: {selected_region}")
 
-# ==========================================================
 # 5. ВКЛАДКИ: КОРПОРАТИВНЫЙ И РОЗНИЧНЫЙ БИЗНЕС
-# ==========================================================
 tab_corp, tab_retail = st.tabs(["🏢 Корпоративный бизнес", "👤 Розничный бизнес"])
 
-# ----------------------------------------------------------
 # ВКЛАДКА 1: КОРПОРАТИВНЫЙ БИЗНЕС
-# ----------------------------------------------------------
 with tab_corp:
     st.markdown("### Ключевые показатели корпоративного блока")
     
@@ -464,9 +456,7 @@ with tab_corp:
             st.session_state.selected_metric_label
         )
 
-# ----------------------------------------------------------
 # ВКЛАДКА 2: РОЗНИЧНЫЙ БИЗНЕС
-# ----------------------------------------------------------
 with tab_retail:
     st.markdown("### Ключевые показатели розничного блока")
     
@@ -488,9 +478,7 @@ with tab_retail:
             st.session_state.selected_metric_label
         )
 
-# ==========================================================
 # 6. ФУТЕР
-# ==========================================================
 st.markdown("---")
 
 col_left, col_center, col_right = st.columns([1, 2, 1])
