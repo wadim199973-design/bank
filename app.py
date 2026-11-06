@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import base64
+
 # 1. НАСТРОЙКА СТРАНИЦЫ И ФИРМЕННОГО СТИЛЯ
 st.set_page_config(page_title="Neo Bank Dashboard", layout="wide", page_icon="🏦")
 
@@ -41,9 +42,8 @@ logo_svg = """
 logo_b64 = base64.b64encode(logo_svg.encode('utf-8')).decode('utf-8')
 logo_data_uri = f"data:image/svg+xml;base64,{logo_b64}"
 
-# Отображаем логотип через st.image()
+# Отображаем логотип и заголовки (ЕДИНСТВЕННЫЙ РАЗ)
 st.image(logo_data_uri, width=280)
-
 st.markdown('<div class="main-header">Оперативный мониторинг показателей</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">Динамика ключевых метрик с детализацией по регионам и периодам</div>', unsafe_allow_html=True)
 st.markdown('<div class="brand-pattern"></div>', unsafe_allow_html=True)
@@ -63,12 +63,6 @@ st.markdown("""
         font-family: 'Helvetica', Arial, sans-serif !important;
         font-weight: 400 !important;
         color: #2D1B4E !important;
-    }
-    
-    .logo-container {
-        text-align: left;
-        margin-bottom: 20px;
-        padding: 20px 0;
     }
     
     .main-header {
@@ -127,6 +121,7 @@ st.markdown("""
         height: 4px;
         background: linear-gradient(90deg, #6B2D9D 0%, #7EDDD3 50%, #00C389 100%);
         margin: 20px 0;
+        border-radius: 2px;
     }
     
     .footer {
@@ -166,16 +161,7 @@ def load_mock_data():
 
 df = load_mock_data()
 
-# 3. ШАПКА С ЛОГОТИПОМ
-st.markdown('<div class="logo-container">', unsafe_allow_html=True)
-st.markdown(LOGO_SVG, unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
-
-st.markdown('<div class="main-header">Оперативный мониторинг показателей</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-header">Динамика ключевых метрик с детализацией по регионам и периодам</div>', unsafe_allow_html=True)
-st.markdown('<div class="brand-pattern"></div>', unsafe_allow_html=True)
-
-# 4. БОКОВАЯ ПАНЕЛЬ С ФИЛЬТРАМИ
+# 3. БОКОВАЯ ПАНЕЛЬ С ФИЛЬТРАМИ
 st.sidebar.markdown("## ⚙️ Параметры отображения")
 
 timeframe = st.sidebar.radio(
@@ -189,7 +175,7 @@ selected_region = st.sidebar.selectbox(
     options=["Все регионы"] + list(df['region'].unique())
 )
 
-# Фильтрация данных
+# 4. ФИЛЬТРАЦИЯ И АГРЕГАЦИЯ ДАННЫХ
 if selected_region != "Все регионы":
     df_filtered = df[df['region'] == selected_region].copy()
 else:
@@ -200,7 +186,6 @@ else:
     }).reset_index()
     df_filtered['region'] = 'Все регионы'
 
-# Агрегация по времени
 freq_map = {"День": "D", "Неделя": "W-MON", "Месяц": "ME"}
 freq = freq_map[timeframe]
 df_filtered = df_filtered.set_index('date')
@@ -340,13 +325,14 @@ with st.expander("📊 Детальные данные"):
 # 8. ФУТЕР С ЛОГОТИПОМ
 st.markdown("---")
 
-# Центрируем логотип в футере
 col_left, col_center, col_right = st.columns([1, 2, 1])
 with col_center:
     st.image(logo_data_uri, width=200)
 
 st.markdown(f"""
-    <div style='text-align: center; font-family: Helvetica, Arial, sans-serif; color: {COLORS["bright_neo"]}; font-size: 12px; margin-top: 10px;'>
-        Система мониторинга показателей | {datetime.now().strftime('%Y')}
+    <div class="footer">
+        <div style='font-family: Helvetica, Arial, sans-serif; color: {COLORS["bright_neo"]}; font-size: 12px;'>
+            Система мониторинга показателей | {datetime.now().strftime('%Y')}
+        </div>
     </div>
 """, unsafe_allow_html=True)
