@@ -30,32 +30,107 @@ if 'dark_logo' not in st.session_state:
     st.session_state.dark_logo = False
 
 # ==============================================================================
-# CSS СТИЛИ
+# CSS СТИЛИ (без широких селекторов, чтобы не ломать меню Streamlit)
 # ==============================================================================
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
-    h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', sans-serif !important; font-weight: 700 !important; }
-    .stMarkdown, p, div, label, span { font-family: 'Helvetica', Arial, sans-serif !important; }
+    h1, h2, h3, h4, h5, h6 { 
+        font-family: 'Montserrat', sans-serif !important; 
+        font-weight: 700 !important; 
+    }
 
-    .main-header { font-family: 'Montserrat', sans-serif !important; font-size: 34px !important; font-weight: 700 !important; margin-top: 6px !important; margin-bottom: 6px !important; }
-    .sub-header { font-family: 'Helvetica', sans-serif !important; font-size: 15px !important; font-weight: 300 !important; opacity: .75; margin-bottom: 24px !important; }
+    .main-header { 
+        font-family: 'Montserrat', sans-serif !important; 
+        font-size: 34px !important; 
+        font-weight: 700 !important; 
+        margin-top: 6px !important; 
+        margin-bottom: 6px !important; 
+    }
+    .sub-header { 
+        font-family: 'Helvetica', Arial, sans-serif !important; 
+        font-size: 15px !important; 
+        font-weight: 300 !important; 
+        opacity: .75; 
+        margin-bottom: 24px !important; 
+    }
 
-    .brand-pattern { height: 4px; background: linear-gradient(90deg, #6B2D9D 0%, #7EDDD3 50%, #00C389 100%); margin: 18px 0; border-radius: 2px; }
-    .footer { text-align: center; padding: 18px 0; margin-top: 36px; border-top: 1px solid rgba(128,128,128,0.3); }
+    .brand-pattern { 
+        height: 4px; 
+        background: linear-gradient(90deg, #6B2D9D 0%, #7EDDD3 50%, #00C389 100%); 
+        margin: 18px 0; 
+        border-radius: 2px; 
+    }
+    .footer { 
+        text-align: center; 
+        padding: 18px 0; 
+        margin-top: 36px; 
+        border-top: 1px solid rgba(128,128,128,0.3); 
+    }
 
-    .stTabs [data-baseweb="tab-list"] { gap: 18px; }
-    .stTabs [data-baseweb="tab"] { font-family: 'Montserrat', sans-serif !important; font-weight: 600 !important; font-size: 15px !important; background-color: rgba(128,128,128,0.10) !important; border-radius: 8px 8px 0 0 !important; padding: 8px 20px !important; }
-    .stTabs [aria-selected="true"] { background-color: #6B2D9D !important; color: #FFFFFF !important; }
+    .stTabs [data-baseweb="tab-list"] { 
+        gap: 18px; 
+    }
+    .stTabs [data-baseweb="tab"] { 
+        font-family: 'Montserrat', sans-serif !important; 
+        font-weight: 600 !important; 
+        font-size: 15px !important; 
+        background-color: rgba(128,128,128,0.10) !important; 
+        border-radius: 8px 8px 0 0 !important; 
+        padding: 8px 20px !important; 
+    }
+    .stTabs [aria-selected="true"] { 
+        background-color: #6B2D9D !important; 
+        color: #FFFFFF !important; 
+    }
 
-    .stButton > button { border-radius: 12px !important; padding: 14px 10px !important; width: 100% !important; font-family: 'Montserrat', sans-serif !important; font-weight: 600 !important; font-size: 14px !important; transition: all .2s ease !important; }
-    .stButton > button:hover { transform: translateY(-2px) !important; box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important; }
+    .stButton > button { 
+        border-radius: 12px !important; 
+        padding: 14px 10px !important; 
+        width: 100% !important; 
+        font-family: 'Montserrat', sans-serif !important; 
+        font-weight: 600 !important; 
+        font-size: 14px !important; 
+        transition: all .2s ease !important; 
+    }
+    .stButton > button:hover { 
+        transform: translateY(-2px) !important; 
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important; 
+    }
 
-    .detail-section { background: rgba(128,128,128,0.12); border-radius: 16px; padding: 26px; margin-top: 24px; border-left: 6px solid #7EDDD3; }
-    .stat-card { background: rgba(128,128,128,0.15); border-radius: 12px; padding: 16px; text-align: center; }
-    .stat-label { font-family: 'Helvetica', Arial, sans-serif; font-size: 11px; opacity: .7; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; color: inherit; }
-    .stat-value { font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; color: inherit; }
+    .detail-section { 
+        background: rgba(128,128,128,0.12); 
+        border-radius: 16px; 
+        padding: 26px; 
+        margin-top: 24px; 
+        border-left: 6px solid #7EDDD3; 
+    }
+    .stat-card { 
+        background: rgba(128,128,128,0.15); 
+        border-radius: 12px; 
+        padding: 16px; 
+        text-align: center; 
+    }
+    .stat-label { 
+        font-family: 'Helvetica', Arial, sans-serif; 
+        font-size: 11px; 
+        opacity: .7; 
+        text-transform: uppercase; 
+        letter-spacing: 1px; 
+        margin-bottom: 6px; 
+        color: inherit; 
+    }
+    .stat-value { 
+        font-family: 'Montserrat', sans-serif; 
+        font-size: 20px; 
+        font-weight: 700; 
+        color: inherit; 
+    }
+
+    [data-testid="stToolbar"] {
+        overflow: visible !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -80,15 +155,20 @@ def render_logo():
     </svg>
     """, unsafe_allow_html=True)
 
-# Отображаем логотип
-render_logo()
+# Отображаем логотип с переключателем рядом
+col_logo, col_toggle = st.columns([4, 1])
+with col_logo:
+    render_logo()
+with col_toggle:
+    if st.toggle("🌙", key="dark_logo", help="Белый логотип для тёмной темы"):
+        st.rerun()
 
 st.markdown('<div class="main-header">Оперативный мониторинг показателей</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">Кликните на любой показатель для детального анализа</div>', unsafe_allow_html=True)
 st.markdown('<div class="brand-pattern"></div>', unsafe_allow_html=True)
 
 # ==============================================================================
-# 2. ДАННЫЕ (реальная вьюшка с fallback на демо)
+# 2. ДАННЫЕ
 # ==============================================================================
 def generate_mock_data():
     np.random.seed(42)
@@ -141,9 +221,6 @@ df = load_data_from_view()
 # 3. БОКОВАЯ ПАНЕЛЬ И АГРЕГАЦИЯ
 # ==============================================================================
 st.sidebar.markdown("## ⚙️ Параметры отображения")
-
-# Чекбокс для тёмного логотипа
-st.sidebar.checkbox("🌙 Тёмный логотип", key="dark_logo")
 
 timeframe = st.sidebar.radio("Период агрегации:", options=["День", "Неделя", "Месяц"], index=1)
 selected_region = st.sidebar.selectbox("Регион:", options=["Все регионы"] + list(df['region'].unique()))
