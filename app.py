@@ -26,11 +26,9 @@ if 'selected_metric' not in st.session_state:
     st.session_state.selected_metric = None
 if 'selected_metric_label' not in st.session_state:
     st.session_state.selected_metric_label = None
-if 'dark_logo' not in st.session_state:
-    st.session_state.dark_logo = False
 
 # ==============================================================================
-# CSS СТИЛИ (без широких селекторов, чтобы не ломать меню Streamlit)
+# CSS СТИЛИ
 # ==============================================================================
 st.markdown("""
 <style>
@@ -135,12 +133,16 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==============================================================================
-# ФУНКЦИЯ ЛОГОТИПА
+# ФУНКЦИЯ ЛОГОТИПА (автоматическое определение темы)
 # ==============================================================================
 def render_logo():
-    is_dark = st.session_state.dark_logo
+    # Определяем тему из настроек Streamlit
+    theme_base = st.get_option('theme.base')
+    is_dark = theme_base == 'dark'
+    
     crescent = '#FFFFFF' if is_dark else '#6B2D9D'
-    text     = '#FFFFFF' if is_dark else '#2D1B4E'
+    text = '#FFFFFF' if is_dark else '#2D1B4E'
+    
     st.markdown(f"""
     <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -155,13 +157,8 @@ def render_logo():
     </svg>
     """, unsafe_allow_html=True)
 
-# Отображаем логотип с переключателем рядом
-col_logo, col_toggle = st.columns([4, 1])
-with col_logo:
-    render_logo()
-with col_toggle:
-    if st.toggle("🌙", key="dark_logo", help="Белый логотип для тёмной темы"):
-        st.rerun()
+# Отображаем логотип
+render_logo()
 
 st.markdown('<div class="main-header">Оперативный мониторинг показателей</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">Кликните на любой показатель для детального анализа</div>', unsafe_allow_html=True)
