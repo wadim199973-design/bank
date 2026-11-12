@@ -23,13 +23,14 @@ COLORS = {
     'white': '#FFFFFF',
 }
 
+# SVG логотип Neo Bank (адаптивный для темной темы)
 logo_svg = """
 <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
     <circle cx="45" cy="40" r="35" fill="none" stroke="#6B2D9D" stroke-width="8"/>
     <circle cx="50" cy="40" r="35" fill="white" stroke="none"/>
-    <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E">neo</text>
-    <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E">bank</text>
-    <text x="95" y="68" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B2D9D">be in digital</text>
+    <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E" class="logo-text">neo</text>
+    <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E" class="logo-text">bank</text>
+    <text x="95" y="68" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B2D9D" class="logo-slogan">be in digital</text>
 </svg>
 """
 
@@ -47,71 +48,214 @@ st.markdown('<div class="sub-header">Кликните на любой показ
 st.markdown('<div class="brand-pattern"></div>', unsafe_allow_html=True)
 
 # ==============================================================================
-# КАСТОМНЫЙ CSS (Светлая и Темная тема по брендбуку)
+# КАСТОМНЫЙ CSS С CSS-ПЕРЕМЕННЫМИ (Правильная работа с темами)
 # ==============================================================================
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
     
-    /* Светлая тема (по умолчанию) */
-    h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', sans-serif !important; font-weight: 700 !important; color: #2D1B4E !important; }
-    .stMarkdown, p, div, label { font-family: 'Helvetica', Arial, sans-serif !important; font-weight: 400 !important; color: #2D1B4E !important; }
-    .main-header { font-family: 'Montserrat', sans-serif !important; font-size: 36px !important; font-weight: 700 !important; color: #2D1B4E !important; margin-top: 10px !important; margin-bottom: 10px !important; }
-    .sub-header { font-family: 'Helvetica', sans-serif !important; font-size: 16px !important; font-weight: 300 !important; color: #6B2D9D !important; margin-bottom: 30px !important; }
-    .stSidebar { background-color: #F8F7FA !important; }
-    .brand-pattern { height: 4px; background: linear-gradient(90deg, #6B2D9D 0%, #7EDDD3 50%, #00C389 100%); margin: 20px 0; border-radius: 2px; }
-    .footer { text-align: center; padding: 20px 0; margin-top: 40px; border-top: 1px solid #E0E0E0; }
-    
-    .stTabs [data-baseweb="tab-list"] { gap: 24px; }
-    .stTabs [data-baseweb="tab"] { font-family: 'Montserrat', sans-serif !important; font-weight: 600 !important; font-size: 16px !important; color: #6B2D9D !important; background-color: #F8F7FA !important; border-radius: 8px 8px 0 0 !important; padding: 10px 24px !important; }
-    .stTabs [aria-selected="true"] { background-color: #6B2D9D !important; color: white !important; }
-    
-    .stButton > button {
-        background: linear-gradient(135deg, #F8F7FA 0%, #FFFFFF 100%) !important;
-        border: 2px solid #E0E0E0 !important; border-radius: 12px !important; padding: 15px !important; margin: 8px 4px !important;
-        cursor: pointer !important; transition: all 0.3s ease !important; text-align: center !important; width: 100% !important;
-        font-family: 'Montserrat', sans-serif !important; color: #2D1B4E !important; font-size: 15px !important; font-weight: 600 !important;
+    /* CSS-ПЕРЕМЕННЫЕ ДЛЯ СВЕТЛОЙ ТЕМЫ (по умолчанию) */
+    :root {
+        --bg-primary: #FFFFFF;
+        --bg-secondary: #F8F7FA;
+        --bg-sidebar: #F8F7FA;
+        --text-primary: #2D1B4E;
+        --text-secondary: #6B2D9D;
+        --text-accent: #7EDDD3;
+        --border-color: #E0E0E0;
+        --button-bg: linear-gradient(135deg, #F8F7FA 0%, #FFFFFF 100%);
+        --button-border: #E0E0E0;
+        --button-text: #2D1B4E;
+        --button-hover-border: #6B2D9D;
+        --detail-bg: #F8F7FA;
+        --detail-border: #6B2D9D;
+        --stat-card-bg: #FFFFFF;
+        --stat-label-color: #6B2D9D;
+        --stat-value-color: #2D1B4E;
+        --logo-text-color: #2D1B4E;
+        --logo-slogan-color: #6B2D9D;
+        --brand-gradient: linear-gradient(90deg, #6B2D9D 0%, #7EDDD3 50%, #00C389 100%);
     }
-    .stButton > button:hover { border-color: #6B2D9D !important; box-shadow: 0 4px 12px rgba(107, 45, 157, 0.15) !important; transform: translateY(-2px) !important; }
-    
-    .detail-section { background: #F8F7FA; border-radius: 16px; padding: 30px; margin-top: 30px; border-left: 6px solid #6B2D9D; }
-    .stat-card { background: white; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-    .stat-label { font-family: 'Helvetica', Arial, sans-serif; font-size: 12px; color: #6B2D9D; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-    .stat-value { font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 700; color: #2D1B4E; }
 
-    /* ТЕМНАЯ ТЕМА (Брендбук Neo Bank) */
+    /* CSS-ПЕРЕМЕННЫЕ ДЛЯ ТЕМНОЙ ТЕМЫ */
     @media (prefers-color-scheme: dark) {
-        .stApp, .main, .block-container { background-color: #2D1B4E !important; color: #FFFFFF !important; }
-        .stSidebar { background-color: #1E1235 !important; }
-        h1, h2, h3, h4, h5, h6, .stMarkdown, p, div, label, span { color: #FFFFFF !important; }
-        .main-header { color: #7EDDD3 !important; }
-        .sub-header { color: #FFFFFF !important; }
-        .brand-pattern { background: linear-gradient(90deg, #7EDDD3 0%, #6B2D9D 50%, #00C389 100%); }
-        
-        .stTabs [data-baseweb="tab"] { background-color: #1E1235 !important; color: #7EDDD3 !important; }
-        .stTabs [aria-selected="true"] { background-color: #6B2D9D !important; color: #FFFFFF !important; }
-        
-        .stButton > button {
-            background: linear-gradient(135deg, #6B2D9D 0%, #4A1E6E 100%) !important;
-            color: #FFFFFF !important; border: 2px solid #7EDDD3 !important;
+        :root {
+            --bg-primary: #2D1B4E;
+            --bg-secondary: #1E1235;
+            --bg-sidebar: #1E1235;
+            --text-primary: #FFFFFF;
+            --text-secondary: #7EDDD3;
+            --text-accent: #7EDDD3;
+            --border-color: #6B2D9D;
+            --button-bg: linear-gradient(135deg, #6B2D9D 0%, #4A1E6E 100%);
+            --button-border: #7EDDD3;
+            --button-text: #FFFFFF;
+            --button-hover-border: #FFFFFF;
+            --detail-bg: #3D2866;
+            --detail-border: #7EDDD3;
+            --stat-card-bg: #6B2D9D;
+            --stat-label-color: #7EDDD3;
+            --stat-value-color: #FFFFFF;
+            --logo-text-color: #FFFFFF;
+            --logo-slogan-color: #7EDDD3;
+            --brand-gradient: linear-gradient(90deg, #7EDDD3 0%, #6B2D9D 50%, #00C389 100%);
         }
-        .stButton > button:hover { border-color: #FFFFFF !important; box-shadow: 0 4px 12px rgba(126, 221, 211, 0.3) !important; }
-        
-        .detail-section { background-color: #3D2866 !important; border-left: 6px solid #7EDDD3 !important; }
-        .detail-section h2 { color: #7EDDD3 !important; }
-        .stat-card { background-color: #6B2D9D !important; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-        .stat-label { color: #7EDDD3 !important; }
-        .stat-value { color: #FFFFFF !important; }
-        .footer { border-top: 1px solid #6B2D9D; }
+    }
+
+    /* БАЗОВЫЕ СТИЛИ */
+    .stApp, .main, .block-container { 
+        background-color: var(--bg-primary) !important; 
+        color: var(--text-primary) !important; 
+    }
+    
+    h1, h2, h3, h4, h5, h6 { 
+        font-family: 'Montserrat', sans-serif !important; 
+        font-weight: 700 !important; 
+        color: var(--text-primary) !important; 
+    }
+    
+    .stMarkdown, p, div, label, span { 
+        font-family: 'Helvetica', Arial, sans-serif !important; 
+        font-weight: 400 !important; 
+        color: var(--text-primary) !important; 
+    }
+    
+    .main-header { 
+        font-family: 'Montserrat', sans-serif !important; 
+        font-size: 36px !important; 
+        font-weight: 700 !important; 
+        color: var(--text-primary) !important; 
+        margin-top: 10px !important; 
+        margin-bottom: 10px !important; 
+    }
+    
+    .sub-header { 
+        font-family: 'Helvetica', sans-serif !important; 
+        font-size: 16px !important; 
+        font-weight: 300 !important; 
+        color: var(--text-secondary) !important; 
+        margin-bottom: 30px !important; 
+    }
+    
+    .stSidebar { 
+        background-color: var(--bg-sidebar) !important; 
+    }
+    
+    .stSidebar h2 { 
+        color: var(--text-secondary) !important; 
+        font-family: 'Montserrat', sans-serif !important; 
+    }
+    
+    .brand-pattern { 
+        height: 4px; 
+        background: var(--brand-gradient); 
+        margin: 20px 0; 
+        border-radius: 2px; 
+    }
+    
+    .footer { 
+        text-align: center; 
+        padding: 20px 0; 
+        margin-top: 40px; 
+        border-top: 1px solid var(--border-color); 
+    }
+    
+    /* ВКЛАДКИ */
+    .stTabs [data-baseweb="tab-list"] { 
+        gap: 24px; 
+    }
+    
+    .stTabs [data-baseweb="tab"] { 
+        font-family: 'Montserrat', sans-serif !important; 
+        font-weight: 600 !important; 
+        font-size: 16px !important; 
+        color: var(--text-secondary) !important; 
+        background-color: var(--bg-secondary) !important; 
+        border-radius: 8px 8px 0 0 !important; 
+        padding: 10px 24px !important; 
+    }
+    
+    .stTabs [aria-selected="true"] { 
+        background-color: #6B2D9D !important; 
+        color: #FFFFFF !important; 
+    }
+    
+    /* КНОПКИ */
+    .stButton > button {
+        background: var(--button-bg) !important;
+        border: 2px solid var(--button-border) !important;
+        border-radius: 12px !important;
+        padding: 15px !important;
+        margin: 8px 4px !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        text-align: center !important;
+        width: 100% !important;
+        font-family: 'Montserrat', sans-serif !important;
+        color: var(--button-text) !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+    }
+    
+    .stButton > button:hover { 
+        border-color: var(--button-hover-border) !important; 
+        box-shadow: 0 4px 12px rgba(126, 221, 211, 0.3) !important; 
+        transform: translateY(-2px) !important; 
+    }
+    
+    /* ДЕТАЛЬНЫЙ АНАЛИЗ */
+    .detail-section { 
+        background-color: var(--detail-bg); 
+        border-radius: 16px; 
+        padding: 30px; 
+        margin-top: 30px; 
+        border-left: 6px solid var(--detail-border); 
+    }
+    
+    .detail-section h2 { 
+        color: var(--text-secondary) !important; 
+    }
+    
+    .stat-card { 
+        background-color: var(--stat-card-bg); 
+        border-radius: 12px; 
+        padding: 20px; 
+        text-align: center; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+    }
+    
+    .stat-label { 
+        font-family: 'Helvetica', Arial, sans-serif; 
+        font-size: 12px; 
+        color: var(--stat-label-color) !important; 
+        text-transform: uppercase; 
+        letter-spacing: 1px; 
+        margin-bottom: 8px; 
+    }
+    
+    .stat-value { 
+        font-family: 'Montserrat', sans-serif; 
+        font-size: 22px; 
+        font-weight: 700; 
+        color: var(--stat-value-color) !important; 
+    }
+    
+    /* SVG ЛОГОТИП */
+    .logo-text {
+        fill: var(--logo-text-color) !important;
+    }
+    
+    .logo-slogan {
+        fill: var(--logo-slogan-color) !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 2. ЗАГРУЗКА ДАННЫХ (VIEW с fallback на mock-данные)
+# 2. ЗАГРУЗКА ДАННЫХ
 # ==============================================================================
 def generate_mock_data():
-    """Генератор тестовых данных (используется, если БД недоступна)"""
+    """Генератор тестовых данных"""
     np.random.seed(42)
     regions = ['Минск', 'Брестская обл.', 'Витебская обл.', 'Гомельская обл.', 'Гродненская обл.', 'Могилевская обл.']
     dates = pd.date_range(end=datetime.today(), periods=180).tolist() 
@@ -135,22 +279,19 @@ def generate_mock_data():
     df['requirements_to_economy'] = df['corp_loans'] + df['corp_current_accounts'] + df['corp_securities']
     return df
 
-@st.cache_data(ttl=300) # Кэш на 5 минут для снижения нагрузки
+@st.cache_data(ttl=300)
 def load_data_from_view():
-    """Попытка загрузить данные из безопасной вьюшки БД"""
+    """Попытка загрузить данные из БД"""
     try:
-        # Читаем параметры подключения из переменных окружения (безопасный способ)
         db_user = os.getenv('DB_USER', 'dashboard_reader')
         db_pass = os.getenv('DB_PASS', 'your_secure_password')
         db_host = os.getenv('DB_HOST', 'localhost')
         db_port = os.getenv('DB_PORT', '5432')
         db_name = os.getenv('DB_NAME', 'bank_dwh')
         
-        # Формируем строку подключения (пример для PostgreSQL)
         db_url = f"postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}"
         engine = create_engine(db_url)
         
-        # Запрос к защищенной вьюшке (все агрегации уже сделаны на стороне БД)
         query = """
             SELECT date, region, corp_loans, corp_current_accounts, corp_deposits, 
                    corp_securities, retail_loans, retail_current_accounts, retail_deposits, 
@@ -161,7 +302,6 @@ def load_data_from_view():
         df['date'] = pd.to_datetime(df['date'])
         return df
     except Exception as e:
-        # Если БД недоступна (например, локальный запуск без настроек), используем mock-данные
         st.sidebar.warning("⚠️ Режим демо: подключение к БД не установлено. Используются тестовые данные.")
         return generate_mock_data()
 
@@ -215,7 +355,7 @@ def clickable_metric(label, key, color='#6B2D9D'):
     
     st.markdown(f"""
     <div style="text-align: center; margin-top: 8px;">
-        <div style="font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; color: #2D1B4E; margin-bottom: 4px;">
+        <div style="font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">
             {latest_val / 1_000_000:,.1f} млн BYN
         </div>
         <div style="font-family: 'Helvetica', Arial, sans-serif; font-size: 14px; font-weight: 600; color: {delta_color};">
@@ -311,7 +451,7 @@ def show_detail_analysis(metric_key, metric_label):
         st.info(f"📍 Отображаются данные только по региону: {selected_region}")
 
 # ==============================================================================
-# 5. ВКЛАДКИ: КОРПОРАТИВНЫЙ И РОЗНИЧНЫЙ БИЗНЕС
+# 5. ВКЛАДКИ
 # ==============================================================================
 tab_corp, tab_retail = st.tabs(["🏢 Корпоративный бизнес", "👤 Розничный бизнес"])
 
@@ -357,7 +497,7 @@ with col_center:
 
 st.markdown(f"""
     <div class="footer">
-        <div style='font-family: Helvetica, Arial, sans-serif; color: {COLORS["bright_neo"]}; font-size: 12px;'>
+        <div style='font-family: Helvetica, Arial, sans-serif; color: var(--text-secondary); font-size: 12px;'>
             Система мониторинга показателей Neo Bank | {datetime.now().strftime('%Y')}
         </div>
     </div>
