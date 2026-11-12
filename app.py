@@ -178,39 +178,27 @@ st.markdown("""
 
 # Адаптивный HTML-логотип (работает и в светлой, и в тёмной теме)
 def render_logo():
-    # Получаем текущую тему из настроек Streamlit
-    theme = st.get_option('theme.base')
-    
-    if theme == 'dark':
-        # Тёмная тема - белый логотип
-        st.markdown("""
-        <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <mask id="crescent">
-                    <circle cx="45" cy="40" r="35" fill="white"/>
-                    <circle cx="50" cy="40" r="35" fill="black"/>
-                </mask>
-            </defs>
-            <circle cx="45" cy="40" r="35" fill="#FFFFFF" mask="url(#crescent)"/>
-            <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#FFFFFF">neo</text>
-            <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#FFFFFF">bank</text>
-        </svg>
-        """, unsafe_allow_html=True)
-    else:
-        # Светлая тема - фиолетовый логотип
-        st.markdown("""
-        <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <mask id="crescent">
-                    <circle cx="45" cy="40" r="35" fill="white"/>
-                    <circle cx="50" cy="40" r="35" fill="black"/>
-                </mask>
-            </defs>
-            <circle cx="45" cy="40" r="35" fill="#6B2D9D" mask="url(#crescent)"/>
-            <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E">neo</text>
-            <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E">bank</text>
-        </svg>
-        """, unsafe_allow_html=True)
+    # Читаем активный цвет фона темы из config.toml и считаем его яркость
+    bg = st.get_option('theme.backgroundColor') or '#FFFFFF'
+    rgb = [int(bg[i:i+2], 16) for i in (1, 3, 5)]
+    is_dark = (0.299*rgb[0] + 0.587*rgb[1] + 0.114*rgb[2]) < 128
+
+    crescent = '#FFFFFF' if is_dark else '#6B2D9D'
+    text     = '#FFFFFF' if is_dark else '#2D1B4E'
+
+    st.markdown(f"""
+    <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <mask id="neo-crescent">
+                <circle cx="45" cy="40" r="35" fill="white"/>
+                <circle cx="50" cy="40" r="35" fill="black"/>
+            </mask>
+        </defs>
+        <circle cx="45" cy="40" r="35" fill="{crescent}" mask="url(#neo-crescent)"/>
+        <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="{text}">neo</text>
+        <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="{text}">bank</text>
+    </svg>
+    """, unsafe_allow_html=True)
 render_logo()
 st.markdown('<div class="main-header">Оперативный мониторинг показателей</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">Кликните на любой показатель для детального анализа</div>', unsafe_allow_html=True)
