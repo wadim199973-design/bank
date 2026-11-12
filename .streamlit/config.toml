@@ -1,25 +1,7 @@
-[theme]
-base = "dark"
-font = "sans serif"
-
-[theme.light]
-primaryColor = "#6B2D9D"
-backgroundColor = "#FFFFFF"
-secondaryBackgroundColor = "#F8F7FA"
-textColor = "#2D1B4E"
-borderColor = "#E0E0E0"
-
-[theme.dark]
-primaryColor = "#FFFFFF"
-backgroundColor = "#2D1B4E"
-secondaryBackgroundColor = "#1E1235"
-textColor = "#FFFFFF"
-borderColor = "#6B2D9D"
-
-[theme.sidebar]
-backgroundColor = "#F8F7FA"
-textColor = "#2D1B4E"
-
-[theme.dark.sidebar]
-backgroundColor = "#1E1235"
-textColor = "#FFFFFF"
+streamlit
+pandas
+numpy
+plotly
+sqlalchemy
+psycopg2-binary
+streamlit-theme
