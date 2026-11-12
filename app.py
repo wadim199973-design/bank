@@ -179,52 +179,19 @@ st.markdown("""
 # Адаптивный HTML-логотип (работает и в светлой, и в тёмной теме)
 def render_logo():
     st.markdown("""
-    <div id="logo-container"></div>
-    <script>
-        function updateLogo() {
-            const container = document.getElementById('logo-container');
-            // Проверяем цвет фона body — в тёмной теме он #2D1B4E или близкий к тёмному
-            const bgColor = window.getComputedStyle(document.body).backgroundColor;
-            const isDark = bgColor.includes('45') || bgColor.includes('30') || bgColor.includes('23') || 
-                          parseInt(bgColor.split('(')[1]?.split(',')[0] || '255') < 100;
-            
-            if (isDark) {
-                // Тёмная тема: полностью белый логотип
-                container.innerHTML = `
-                    <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <mask id="crescent-dark">
-                                <circle cx="45" cy="40" r="35" fill="white"/>
-                                <circle cx="50" cy="40" r="35" fill="black"/>
-                            </mask>
-                        </defs>
-                        <circle cx="45" cy="40" r="35" fill="#FFFFFF" mask="url(#crescent-dark)"/>
-                        <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#FFFFFF">neo</text>
-                        <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#FFFFFF">bank</text>
-                    </svg>
-                `;
-            } else {
-                // Светлая тема: фиолетовый логотип
-                container.innerHTML = `
-                    <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <mask id="crescent-light">
-                                <circle cx="45" cy="40" r="35" fill="white"/>
-                                <circle cx="50" cy="40" r="35" fill="black"/>
-                            </mask>
-                        </defs>
-                        <circle cx="45" cy="40" r="35" fill="#6B2D9D" mask="url(#crescent-light)"/>
-                        <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E">neo</text>
-                        <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E">bank</text>
-                    </svg>
-                `;
-            }
-        }
-        
-        // Запускаем при загрузке и при изменении темы
-        updateLogo();
-        setInterval(updateLogo, 500);
-    </script>
+    <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <mask id="neo-crescent">
+                <circle cx="45" cy="40" r="35" fill="white"/>
+                <circle cx="50" cy="40" r="35" fill="black"/>
+            </mask>
+        </defs>
+        <!-- Полумесяц: цвет = primaryColor темы (фиолетовый/белый) -->
+        <circle cx="45" cy="40" r="35" fill="var(--primary-color, #6B2D9D)" mask="url(#neo-crescent)"/>
+        <!-- Текст: цвет = textColor темы (тёмно-фиолетовый/белый) -->
+        <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="var(--text-color, #2D1B4E)">neo</text>
+        <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="var(--text-color, #2D1B4E)">bank</text>
+    </svg>
     """, unsafe_allow_html=True)
 
 render_logo()
