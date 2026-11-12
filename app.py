@@ -133,12 +133,20 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==============================================================================
-# ФУНКЦИЯ ЛОГОТИПА (автоматическое определение темы)
+# ФУНКЦИЯ ЛОГОТИПА
 # ==============================================================================
 def render_logo():
-    # Определяем тему из настроек Streamlit
-    theme_base = st.get_option('theme.base')
-    is_dark = theme_base == 'dark'
+    is_dark = False
+    try:
+        from streamlit_theme import st_theme
+        theme = st_theme()
+        if theme:
+            bg = theme.get('backgroundColor', '#FFFFFF')
+            rgb = [int(bg[i:i+2], 16) for i in (1, 3, 5)]
+            brightness = 0.299*rgb[0] + 0.587*rgb[1] + 0.114*rgb[2]
+            is_dark = brightness < 128
+    except Exception:
+        is_dark = False
     
     crescent = '#FFFFFF' if is_dark else '#6B2D9D'
     text = '#FFFFFF' if is_dark else '#2D1B4E'
@@ -157,7 +165,7 @@ def render_logo():
     </svg>
     """, unsafe_allow_html=True)
 
-# Отображаем логотип
+# Отображаем логотип в шапке
 render_logo()
 
 st.markdown('<div class="main-header">Оперативный мониторинг показателей</div>', unsafe_allow_html=True)
@@ -274,36 +282,12 @@ def clickable_metric(label, key):
         st.session_state.selected_metric_label = label
         st.rerun()
 
-def render_logo():
-    # Определяем реальную активную тему через streamlit-theme
-    is_dark = False
-    try:
-        from streamlit_theme import st_theme
-        theme = st_theme()
-        if theme:
-            # Проверяем цвет фона - если тёмный, тема dark
-            bg = theme.get('backgroundColor', '#FFFFFF')
-            rgb = [int(bg[i:i+2], 16) for i in (1, 3, 5)]
-            brightness = 0.299*rgb[0] + 0.587*rgb[1] + 0.114*rgb[2]
-            is_dark = brightness < 128
-    except Exception:
-        is_dark = False
-    
-    crescent = '#FFFFFF' if is_dark else '#6B2D9D'
-    text = '#FFFFFF' if is_dark else '#2D1B4E'
-    
+def show_detail_analysis(metric_key, metric_label):
+    st.markdown("---")
     st.markdown(f"""
-    <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <mask id="neo-crescent">
-                <circle cx="45" cy="40" r="35" fill="white"/>
-                <circle cx="50" cy="40" r="35" fill="black"/>
-            </mask>
-        </defs>
-        <circle cx="45" cy="40" r="35" fill="{crescent}" mask="url(#neo-crescent)"/>
-        <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="{text}">neo</text>
-        <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="{text}">bank</text>
-    </svg>
+    <div class="detail-section">
+        <h2 style="font-family:'Montserrat',sans-serif; margin:0;">📊 Детальный анализ: {metric_label}</h2>
+    </div>
     """, unsafe_allow_html=True)
 
     latest_val = df_agg[metric_key].iloc[-1]
