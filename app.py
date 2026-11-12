@@ -180,44 +180,24 @@ st.markdown("""
 def render_logo():
     st.markdown("""
     <style>
-        .logo-light { display: block; }
-        .logo-dark { display: none; }
-        
-        @media (prefers-color-scheme: dark) {
-            .logo-light { display: none; }
-            .logo-dark { display: block; }
+        .neo-crescent { 
+            fill: var(--primary-color, #6B2D9D); 
+        }
+        .neo-text { 
+            fill: var(--text-color, #2D1B4E); 
         }
     </style>
-    
-    <!-- Светлая тема: фиолетовый логотип -->
-    <div class="logo-light">
-        <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <mask id="crescent-light">
-                    <circle cx="45" cy="40" r="35" fill="white"/>
-                    <circle cx="50" cy="40" r="35" fill="black"/>
-                </mask>
-            </defs>
-            <circle cx="45" cy="40" r="35" fill="#6B2D9D" mask="url(#crescent-light)"/>
-            <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E">neo</text>
-            <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E">bank</text>
-        </svg>
-    </div>
-    
-    <!-- Тёмная тема: белый логотип -->
-    <div class="logo-dark">
-        <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <mask id="crescent-dark">
-                    <circle cx="45" cy="40" r="35" fill="white"/>
-                    <circle cx="50" cy="40" r="35" fill="black"/>
-                </mask>
-            </defs>
-            <circle cx="45" cy="40" r="35" fill="#FFFFFF" mask="url(#crescent-dark)"/>
-            <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#FFFFFF">neo</text>
-            <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#FFFFFF">bank</text>
-        </svg>
-    </div>
+    <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <mask id="neo-crescent">
+                <circle cx="45" cy="40" r="35" fill="white"/>
+                <circle cx="50" cy="40" r="35" fill="black"/>
+            </mask>
+        </defs>
+        <circle class="neo-crescent" cx="45" cy="40" r="35" mask="url(#neo-crescent)"/>
+        <text class="neo-text" x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400">neo</text>
+        <text class="neo-text" x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400">bank</text>
+    </svg>
     """, unsafe_allow_html=True)
 render_logo()
 st.markdown('<div class="main-header">Оперативный мониторинг показателей</div>', unsafe_allow_html=True)
