@@ -5,3 +5,4 @@ plotly
 sqlalchemy
 psycopg2-binary
 streamlit-theme
+treamlit-theme>=0.3.0
