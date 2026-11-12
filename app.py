@@ -178,35 +178,39 @@ st.markdown("""
 
 # Адаптивный HTML-логотип (работает и в светлой, и в тёмной теме)
 def render_logo():
-    st.markdown("""
-    <div id="neo-logo"></div>
-    <script>
-        function updateLogo() {
-            const bgColor = getComputedStyle(document.body).backgroundColor;
-            const rgb = bgColor.match(/\d+/g);
-            const isDark = rgb && (parseInt(rgb[0]) + parseInt(rgb[1]) + parseInt(rgb[2])) < 300;
-            const crescentColor = isDark ? '#FFFFFF' : '#6B2D9D';
-            const textColor = isDark ? '#FFFFFF' : '#2D1B4E';
-            
-            document.getElementById('neo-logo').innerHTML = `
-                <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <mask id="neo-crescent">
-                            <circle cx="45" cy="40" r="35" fill="white"/>
-                            <circle cx="50" cy="40" r="35" fill="black"/>
-                        </mask>
-                    </defs>
-                    <circle cx="45" cy="40" r="35" fill="${crescentColor}" mask="url(#neo-crescent)"/>
-                    <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="${textColor}">neo</text>
-                    <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="${textColor}">bank</text>
-                </svg>
-            `;
-        }
-        updateLogo();
-        setInterval(updateLogo, 500);
-    </script>
-    """, unsafe_allow_html=True)
-
+    # Получаем текущую тему из настроек Streamlit
+    theme = st.get_option('theme.base')
+    
+    if theme == 'dark':
+        # Тёмная тема - белый логотип
+        st.markdown("""
+        <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <mask id="crescent">
+                    <circle cx="45" cy="40" r="35" fill="white"/>
+                    <circle cx="50" cy="40" r="35" fill="black"/>
+                </mask>
+            </defs>
+            <circle cx="45" cy="40" r="35" fill="#FFFFFF" mask="url(#crescent)"/>
+            <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#FFFFFF">neo</text>
+            <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#FFFFFF">bank</text>
+        </svg>
+        """, unsafe_allow_html=True)
+    else:
+        # Светлая тема - фиолетовый логотип
+        st.markdown("""
+        <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <mask id="crescent">
+                    <circle cx="45" cy="40" r="35" fill="white"/>
+                    <circle cx="50" cy="40" r="35" fill="black"/>
+                </mask>
+            </defs>
+            <circle cx="45" cy="40" r="35" fill="#6B2D9D" mask="url(#crescent)"/>
+            <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E">neo</text>
+            <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E">bank</text>
+        </svg>
+        """, unsafe_allow_html=True)
 render_logo()
 st.markdown('<div class="main-header">Оперативный мониторинг показателей</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">Кликните на любой показатель для детального анализа</div>', unsafe_allow_html=True)
