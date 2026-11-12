@@ -178,15 +178,22 @@ st.markdown("""
 
 # Адаптивный HTML-логотип (работает и в светлой, и в тёмной теме)
 def render_logo():
-    st.markdown("""
-    <style>
-        .neo-crescent { 
-            fill: var(--primary-color, #6B2D9D); 
-        }
-        .neo-text { 
-            fill: var(--text-color, #2D1B4E); 
-        }
-    </style>
+    # Определяем активную тему из меню Streamlit
+    is_dark = False
+    try:
+        from streamlit_theme import st_theme
+        theme = st_theme()
+        if theme:
+            bg = theme.get('backgroundColor', '#FFFFFF')
+            rgb = [int(bg[i:i+2], 16) for i in (1, 3, 5)]
+            is_dark = (0.299*rgb[0] + 0.587*rgb[1] + 0.114*rgb[2]) < 128
+    except Exception:
+        is_dark = False
+
+    crescent = '#FFFFFF' if is_dark else '#6B2D9D'
+    text     = '#FFFFFF' if is_dark else '#2D1B4E'
+
+    st.markdown(f"""
     <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
         <defs>
             <mask id="neo-crescent">
@@ -194,9 +201,9 @@ def render_logo():
                 <circle cx="50" cy="40" r="35" fill="black"/>
             </mask>
         </defs>
-        <circle class="neo-crescent" cx="45" cy="40" r="35" mask="url(#neo-crescent)"/>
-        <text class="neo-text" x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400">neo</text>
-        <text class="neo-text" x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400">bank</text>
+        <circle cx="45" cy="40" r="35" fill="{crescent}" mask="url(#neo-crescent)"/>
+        <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="{text}">neo</text>
+        <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="{text}">bank</text>
     </svg>
     """, unsafe_allow_html=True)
 render_logo()
