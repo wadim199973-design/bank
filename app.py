@@ -33,38 +33,146 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
-    h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', sans-serif !important; font-weight: 700 !important; }
-    .stMarkdown, p, div, label, span { font-family: 'Helvetica', Arial, sans-serif !important; }
+    /* ТОЛЬКО заголовки — не трогаем div/span/p */
+    h1, h2, h3, h4, h5, h6 { 
+        font-family: 'Montserrat', sans-serif !important; 
+        font-weight: 700 !important; 
+    }
 
-    .main-header { font-family: 'Montserrat', sans-serif !important; font-size: 34px !important; font-weight: 700 !important; margin-top: 6px !important; margin-bottom: 6px !important; }
-    .sub-header { font-family: 'Helvetica', sans-serif !important; font-size: 15px !important; font-weight: 300 !important; opacity: .75; margin-bottom: 24px !important; }
+    /* Специфичные классы для наших элементов */
+    .main-header { 
+        font-family: 'Montserrat', sans-serif !important; 
+        font-size: 34px !important; 
+        font-weight: 700 !important; 
+        margin-top: 6px !important; 
+        margin-bottom: 6px !important; 
+    }
+    .sub-header { 
+        font-family: 'Helvetica', Arial, sans-serif !important; 
+        font-size: 15px !important; 
+        font-weight: 300 !important; 
+        opacity: .75; 
+        margin-bottom: 24px !important; 
+    }
 
-    .brand-pattern { height: 4px; background: linear-gradient(90deg, #6B2D9D 0%, #7EDDD3 50%, #00C389 100%); margin: 18px 0; border-radius: 2px; }
-    .footer { text-align: center; padding: 18px 0; margin-top: 36px; border-top: 1px solid rgba(128,128,128,0.3); }
+    .brand-pattern { 
+        height: 4px; 
+        background: linear-gradient(90deg, #6B2D9D 0%, #7EDDD3 50%, #00C389 100%); 
+        margin: 18px 0; 
+        border-radius: 2px; 
+    }
+    .footer { 
+        text-align: center; 
+        padding: 18px 0; 
+        margin-top: 36px; 
+        border-top: 1px solid rgba(128,128,128,0.3); 
+    }
 
-    /* Адаптивный логотип через currentColor (наследует цвет текста темы) */
-    .neo-logo { display: flex; align-items: center; gap: 12px; color: inherit; }
-    .neo-mark { width: 60px; height: 60px; border-radius: 50%; border: 6px solid currentColor;
-                border-top-color: transparent; border-right-color: transparent;
-                display: flex; align-items: center; justify-content: center;
-                font-family: 'Helvetica', Arial, sans-serif; font-size: 20px; font-weight: 400; }
-    .neo-bank { font-family: 'Helvetica', Arial, sans-serif; font-size: 30px; font-weight: 400; color: currentColor; }
-    .neo-slogan { display: block; font-family: 'Helvetica', Arial, sans-serif; font-size: 12px; color: currentColor; opacity: .75; margin-top: -4px; }
+    /* Адаптивный логотип */
+    .neo-logo { 
+        display: flex; 
+        align-items: center; 
+        gap: 12px; 
+        color: inherit; 
+    }
+    .neo-mark { 
+        width: 60px; 
+        height: 60px; 
+        border-radius: 50%; 
+        border: 6px solid currentColor;
+        border-top-color: transparent; 
+        border-right-color: transparent;
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        font-family: 'Helvetica', Arial, sans-serif; 
+        font-size: 20px; 
+        font-weight: 400; 
+    }
+    .neo-bank { 
+        font-family: 'Helvetica', Arial, sans-serif; 
+        font-size: 30px; 
+        font-weight: 400; 
+        color: currentColor; 
+    }
+    .neo-slogan { 
+        display: block; 
+        font-family: 'Helvetica', Arial, sans-serif; 
+        font-size: 12px; 
+        color: currentColor; 
+        opacity: .75; 
+        margin-top: -4px; 
+    }
 
     /* Вкладки */
-    .stTabs [data-baseweb="tab-list"] { gap: 18px; }
-    .stTabs [data-baseweb="tab"] { font-family: 'Montserrat', sans-serif !important; font-weight: 600 !important; font-size: 15px !important; background-color: rgba(128,128,128,0.10) !important; border-radius: 8px 8px 0 0 !important; padding: 8px 20px !important; }
-    .stTabs [aria-selected="true"] { background-color: #6B2D9D !important; color: #FFFFFF !important; }
+    .stTabs [data-baseweb="tab-list"] { 
+        gap: 18px; 
+    }
+    .stTabs [data-baseweb="tab"] { 
+        font-family: 'Montserrat', sans-serif !important; 
+        font-weight: 600 !important; 
+        font-size: 15px !important; 
+        background-color: rgba(128,128,128,0.10) !important; 
+        border-radius: 8px 8px 0 0 !important; 
+        padding: 8px 20px !important; 
+    }
+    .stTabs [aria-selected="true"] { 
+        background-color: #6B2D9D !important; 
+        color: #FFFFFF !important; 
+    }
 
-    /* Кнопки-метрики: наследуют тему, добавляем только форму */
-    .stButton > button { border-radius: 12px !important; padding: 14px 10px !important; width: 100% !important; font-family: 'Montserrat', sans-serif !important; font-weight: 600 !important; font-size: 14px !important; transition: all .2s ease !important; }
-    .stButton > button:hover { transform: translateY(-2px) !important; box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important; }
+    /* Кнопки-метрики */
+    .stButton > button { 
+        border-radius: 12px !important; 
+        padding: 14px 10px !important; 
+        width: 100% !important; 
+        font-family: 'Montserrat', sans-serif !important; 
+        font-weight: 600 !important; 
+        font-size: 14px !important; 
+        transition: all .2s ease !important; 
+    }
+    .stButton > button:hover { 
+        transform: translateY(-2px) !important; 
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important; 
+    }
 
-    /* Карточки (полупрозрачные фоны читаемы в обеих темах) */
-    .detail-section { background: rgba(128,128,128,0.12); border-radius: 16px; padding: 26px; margin-top: 24px; border-left: 6px solid #7EDDD3; }
-    .stat-card { background: rgba(128,128,128,0.15); border-radius: 12px; padding: 16px; text-align: center; }
-    .stat-label { font-family: 'Helvetica', Arial, sans-serif; font-size: 11px; opacity: .7; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; color: inherit; }
-    .stat-value { font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; color: inherit; }
+    /* Карточки */
+    .detail-section { 
+        background: rgba(128,128,128,0.12); 
+        border-radius: 16px; 
+        padding: 26px; 
+        margin-top: 24px; 
+        border-left: 6px solid #7EDDD3; 
+    }
+    .stat-card { 
+        background: rgba(128,128,128,0.15); 
+        border-radius: 12px; 
+        padding: 16px; 
+        text-align: center; 
+    }
+    .stat-label { 
+        font-family: 'Helvetica', Arial, sans-serif; 
+        font-size: 11px; 
+        opacity: .7; 
+        text-transform: uppercase; 
+        letter-spacing: 1px; 
+        margin-bottom: 6px; 
+        color: inherit; 
+    }
+    .stat-value { 
+        font-family: 'Montserrat', sans-serif; 
+        font-size: 20px; 
+        font-weight: 700; 
+        color: inherit; 
+    }
+
+    /* ИСПРАВЛЕНИЕ: предотвращаем переполнение текста в меню Streamlit */
+    [data-testid="stToolbar"] {
+        overflow: visible !important;
+    }
+    [data-testid="stHeader"] {
+        overflow: visible !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
