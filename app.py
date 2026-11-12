@@ -182,31 +182,35 @@ def render_logo():
     <style>
         .logo-light { display: block; }
         .logo-dark { display: none; }
-        
-        /* Streamlit добавляет data-theme="dark" при переключении на тёмную тему */
         [data-theme="dark"] .logo-light { display: none; }
         [data-theme="dark"] .logo-dark { display: block; }
     </style>
     
-    <!-- Светлый логотип: фиолетовый полумесяц + тёмно-фиолетовый текст -->
+    <!-- Светлый логотип -->
     <div class="logo-light">
         <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
-            <!-- Полумесяц -->
-            <circle cx="45" cy="40" r="35" fill="none" stroke="#6B2D9D" stroke-width="8"/>
-            <circle cx="50" cy="40" r="35" fill="#FFFFFF" stroke="none"/>
-            <!-- Текст -->
+            <defs>
+                <mask id="crescent-light">
+                    <circle cx="45" cy="40" r="35" fill="white"/>
+                    <circle cx="50" cy="40" r="35" fill="black"/>
+                </mask>
+            </defs>
+            <circle cx="45" cy="40" r="35" fill="#6B2D9D" mask="url(#crescent-light)"/>
             <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E">neo</text>
             <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E">bank</text>
         </svg>
     </div>
     
-    <!-- Тёмный логотип: белый полумесяц + белый текст -->
+    <!-- Тёмный логотип -->
     <div class="logo-dark">
         <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
-            <!-- Полумесяц -->
-            <circle cx="45" cy="40" r="35" fill="none" stroke="#FFFFFF" stroke-width="8"/>
-            <circle cx="50" cy="40" r="35" fill="#2D1B4E" stroke="none"/>
-            <!-- Текст -->
+            <defs>
+                <mask id="crescent-dark">
+                    <circle cx="45" cy="40" r="35" fill="white"/>
+                    <circle cx="50" cy="40" r="35" fill="black"/>
+                </mask>
+            </defs>
+            <circle cx="45" cy="40" r="35" fill="#FFFFFF" mask="url(#crescent-dark)"/>
             <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#FFFFFF">neo</text>
             <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#FFFFFF">bank</text>
         </svg>
