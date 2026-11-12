@@ -180,23 +180,36 @@ st.markdown("""
 def render_logo():
     st.markdown("""
     <style>
-        .neo-logo-text { color: #6B2D9D !important; }
-        .neo-logo-mark { border-color: #6B2D9D !important; color: #6B2D9D !important; }
+        .logo-light { display: block; }
+        .logo-dark { display: none; }
         
-        @media (prefers-color-scheme: dark) {
-            .neo-logo-text { color: #FFFFFF !important; }
-            .neo-logo-mark { border-color: #FFFFFF !important; color: #FFFFFF !important; }
-        }
+        /* Streamlit добавляет data-theme="dark" при переключении на тёмную тему */
+        [data-theme="dark"] .logo-light { display: none; }
+        [data-theme="dark"] .logo-dark { display: block; }
     </style>
-    <div style="display: flex; align-items: center; gap: 12px;">
-        <div class="neo-logo-mark" style="width: 60px; height: 60px; border-radius: 50%; border: 6px solid #6B2D9D;
-                    border-top-color: transparent; border-right-color: transparent;
-                    display: flex; align-items: center; justify-content: center;
-                    font-family: 'Helvetica', Arial, sans-serif; font-size: 20px; font-weight: 400;">neo</div>
-        <div>
-            <span class="neo-logo-text" style="font-family: 'Helvetica', Arial, sans-serif; font-size: 30px; font-weight: 400;">bank</span>
-            <span class="neo-logo-text" style="display: block; font-family: 'Helvetica', Arial, sans-serif; font-size: 12px; opacity: .75; margin-top: -4px;">be in digital</span>
-        </div>
+    
+    <!-- Светлый логотип: фиолетовый полумесяц + тёмно-фиолетовый текст -->
+    <div class="logo-light">
+        <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+            <!-- Полумесяц -->
+            <circle cx="45" cy="40" r="35" fill="none" stroke="#6B2D9D" stroke-width="8"/>
+            <circle cx="50" cy="40" r="35" fill="#FFFFFF" stroke="none"/>
+            <!-- Текст -->
+            <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E">neo</text>
+            <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#2D1B4E">bank</text>
+        </svg>
+    </div>
+    
+    <!-- Тёмный логотип: белый полумесяц + белый текст -->
+    <div class="logo-dark">
+        <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+            <!-- Полумесяц -->
+            <circle cx="45" cy="40" r="35" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+            <circle cx="50" cy="40" r="35" fill="#2D1B4E" stroke="none"/>
+            <!-- Текст -->
+            <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#FFFFFF">neo</text>
+            <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#FFFFFF">bank</text>
+        </svg>
     </div>
     """, unsafe_allow_html=True)
 
