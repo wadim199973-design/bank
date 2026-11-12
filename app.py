@@ -179,11 +179,23 @@ st.markdown("""
 # Адаптивный HTML-логотип (работает и в светлой, и в тёмной теме)
 def render_logo():
     st.markdown("""
-    <div class="neo-logo">
-        <div class="neo-mark">neo</div>
+    <style>
+        .neo-logo-text { color: #6B2D9D !important; }
+        .neo-logo-mark { border-color: #6B2D9D !important; color: #6B2D9D !important; }
+        
+        @media (prefers-color-scheme: dark) {
+            .neo-logo-text { color: #FFFFFF !important; }
+            .neo-logo-mark { border-color: #FFFFFF !important; color: #FFFFFF !important; }
+        }
+    </style>
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <div class="neo-logo-mark" style="width: 60px; height: 60px; border-radius: 50%; border: 6px solid #6B2D9D;
+                    border-top-color: transparent; border-right-color: transparent;
+                    display: flex; align-items: center; justify-content: center;
+                    font-family: 'Helvetica', Arial, sans-serif; font-size: 20px; font-weight: 400;">neo</div>
         <div>
-            <span class="neo-bank">bank</span>
-            <span class="neo-slogan">be in digital</span>
+            <span class="neo-logo-text" style="font-family: 'Helvetica', Arial, sans-serif; font-size: 30px; font-weight: 400;">bank</span>
+            <span class="neo-logo-text" style="display: block; font-family: 'Helvetica', Arial, sans-serif; font-size: 12px; opacity: .75; margin-top: -4px;">be in digital</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
