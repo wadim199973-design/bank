@@ -179,19 +179,34 @@ st.markdown("""
 # Адаптивный HTML-логотип (работает и в светлой, и в тёмной теме)
 def render_logo():
     st.markdown("""
-    <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <mask id="neo-crescent">
-                <circle cx="45" cy="40" r="35" fill="white"/>
-                <circle cx="50" cy="40" r="35" fill="black"/>
-            </mask>
-        </defs>
-        <!-- Полумесяц: цвет = primaryColor темы (фиолетовый/белый) -->
-        <circle cx="45" cy="40" r="35" fill="var(--primary-color, #6B2D9D)" mask="url(#neo-crescent)"/>
-        <!-- Текст: цвет = textColor темы (тёмно-фиолетовый/белый) -->
-        <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="var(--text-color, #2D1B4E)">neo</text>
-        <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="var(--text-color, #2D1B4E)">bank</text>
-    </svg>
+    <style>
+        .neo-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 10px 0;
+        }
+        .neo-crescent {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 6px solid var(--primary-color, #6B2D9D);
+            border-top-color: transparent;
+            border-right-color: transparent;
+            flex-shrink: 0;
+        }
+        .neo-text {
+            font-family: 'Helvetica', Arial, sans-serif;
+            font-size: 32px;
+            font-weight: 400;
+            color: var(--text-color, #2D1B4E);
+            letter-spacing: -0.5px;
+        }
+    </style>
+    <div class="neo-logo-container">
+        <div class="neo-crescent"></div>
+        <div class="neo-text">neo bank</div>
+    </div>
     """, unsafe_allow_html=True)
 
 render_logo()
