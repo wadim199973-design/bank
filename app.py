@@ -21,178 +21,51 @@ COLORS = {
     'white': '#FFFFFF',
 }
 
+# Инициализация session_state
 if 'selected_metric' not in st.session_state:
     st.session_state.selected_metric = None
 if 'selected_metric_label' not in st.session_state:
     st.session_state.selected_metric_label = None
+if 'dark_logo' not in st.session_state:
+    st.session_state.dark_logo = False
 
 # ==============================================================================
-# CSS: только типографика и размеры. ЦВЕТА ФОНА/ТЕКСТА задаёт тема из config.toml
+# CSS СТИЛИ
 # ==============================================================================
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
-    /* ТОЛЬКО заголовки — не трогаем div/span/p */
-    h1, h2, h3, h4, h5, h6 { 
-        font-family: 'Montserrat', sans-serif !important; 
-        font-weight: 700 !important; 
-    }
+    h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', sans-serif !important; font-weight: 700 !important; }
+    .stMarkdown, p, div, label, span { font-family: 'Helvetica', Arial, sans-serif !important; }
 
-    /* Специфичные классы для наших элементов */
-    .main-header { 
-        font-family: 'Montserrat', sans-serif !important; 
-        font-size: 34px !important; 
-        font-weight: 700 !important; 
-        margin-top: 6px !important; 
-        margin-bottom: 6px !important; 
-    }
-    .sub-header { 
-        font-family: 'Helvetica', Arial, sans-serif !important; 
-        font-size: 15px !important; 
-        font-weight: 300 !important; 
-        opacity: .75; 
-        margin-bottom: 24px !important; 
-    }
+    .main-header { font-family: 'Montserrat', sans-serif !important; font-size: 34px !important; font-weight: 700 !important; margin-top: 6px !important; margin-bottom: 6px !important; }
+    .sub-header { font-family: 'Helvetica', sans-serif !important; font-size: 15px !important; font-weight: 300 !important; opacity: .75; margin-bottom: 24px !important; }
 
-    .brand-pattern { 
-        height: 4px; 
-        background: linear-gradient(90deg, #6B2D9D 0%, #7EDDD3 50%, #00C389 100%); 
-        margin: 18px 0; 
-        border-radius: 2px; 
-    }
-    .footer { 
-        text-align: center; 
-        padding: 18px 0; 
-        margin-top: 36px; 
-        border-top: 1px solid rgba(128,128,128,0.3); 
-    }
+    .brand-pattern { height: 4px; background: linear-gradient(90deg, #6B2D9D 0%, #7EDDD3 50%, #00C389 100%); margin: 18px 0; border-radius: 2px; }
+    .footer { text-align: center; padding: 18px 0; margin-top: 36px; border-top: 1px solid rgba(128,128,128,0.3); }
 
-    /* Адаптивный логотип */
-    .neo-logo { 
-        display: flex; 
-        align-items: center; 
-        gap: 12px; 
-        color: inherit; 
-    }
-    .neo-mark { 
-        width: 60px; 
-        height: 60px; 
-        border-radius: 50%; 
-        border: 6px solid currentColor;
-        border-top-color: transparent; 
-        border-right-color: transparent;
-        display: flex; 
-        align-items: center; 
-        justify-content: center;
-        font-family: 'Helvetica', Arial, sans-serif; 
-        font-size: 20px; 
-        font-weight: 400; 
-    }
-    .neo-bank { 
-        font-family: 'Helvetica', Arial, sans-serif; 
-        font-size: 30px; 
-        font-weight: 400; 
-        color: currentColor; 
-    }
-    .neo-slogan { 
-        display: block; 
-        font-family: 'Helvetica', Arial, sans-serif; 
-        font-size: 12px; 
-        color: currentColor; 
-        opacity: .75; 
-        margin-top: -4px; 
-    }
+    .stTabs [data-baseweb="tab-list"] { gap: 18px; }
+    .stTabs [data-baseweb="tab"] { font-family: 'Montserrat', sans-serif !important; font-weight: 600 !important; font-size: 15px !important; background-color: rgba(128,128,128,0.10) !important; border-radius: 8px 8px 0 0 !important; padding: 8px 20px !important; }
+    .stTabs [aria-selected="true"] { background-color: #6B2D9D !important; color: #FFFFFF !important; }
 
-    /* Вкладки */
-    .stTabs [data-baseweb="tab-list"] { 
-        gap: 18px; 
-    }
-    .stTabs [data-baseweb="tab"] { 
-        font-family: 'Montserrat', sans-serif !important; 
-        font-weight: 600 !important; 
-        font-size: 15px !important; 
-        background-color: rgba(128,128,128,0.10) !important; 
-        border-radius: 8px 8px 0 0 !important; 
-        padding: 8px 20px !important; 
-    }
-    .stTabs [aria-selected="true"] { 
-        background-color: #6B2D9D !important; 
-        color: #FFFFFF !important; 
-    }
+    .stButton > button { border-radius: 12px !important; padding: 14px 10px !important; width: 100% !important; font-family: 'Montserrat', sans-serif !important; font-weight: 600 !important; font-size: 14px !important; transition: all .2s ease !important; }
+    .stButton > button:hover { transform: translateY(-2px) !important; box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important; }
 
-    /* Кнопки-метрики */
-    .stButton > button { 
-        border-radius: 12px !important; 
-        padding: 14px 10px !important; 
-        width: 100% !important; 
-        font-family: 'Montserrat', sans-serif !important; 
-        font-weight: 600 !important; 
-        font-size: 14px !important; 
-        transition: all .2s ease !important; 
-    }
-    .stButton > button:hover { 
-        transform: translateY(-2px) !important; 
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important; 
-    }
-
-    /* Карточки */
-    .detail-section { 
-        background: rgba(128,128,128,0.12); 
-        border-radius: 16px; 
-        padding: 26px; 
-        margin-top: 24px; 
-        border-left: 6px solid #7EDDD3; 
-    }
-    .stat-card { 
-        background: rgba(128,128,128,0.15); 
-        border-radius: 12px; 
-        padding: 16px; 
-        text-align: center; 
-    }
-    .stat-label { 
-        font-family: 'Helvetica', Arial, sans-serif; 
-        font-size: 11px; 
-        opacity: .7; 
-        text-transform: uppercase; 
-        letter-spacing: 1px; 
-        margin-bottom: 6px; 
-        color: inherit; 
-    }
-    .stat-value { 
-        font-family: 'Montserrat', sans-serif; 
-        font-size: 20px; 
-        font-weight: 700; 
-        color: inherit; 
-    }
-
-    /* ИСПРАВЛЕНИЕ: предотвращаем переполнение текста в меню Streamlit */
-    [data-testid="stToolbar"] {
-        overflow: visible !important;
-    }
-    [data-testid="stHeader"] {
-        overflow: visible !important;
-    }
+    .detail-section { background: rgba(128,128,128,0.12); border-radius: 16px; padding: 26px; margin-top: 24px; border-left: 6px solid #7EDDD3; }
+    .stat-card { background: rgba(128,128,128,0.15); border-radius: 12px; padding: 16px; text-align: center; }
+    .stat-label { font-family: 'Helvetica', Arial, sans-serif; font-size: 11px; opacity: .7; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; color: inherit; }
+    .stat-value { font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; color: inherit; }
 </style>
 """, unsafe_allow_html=True)
 
-# Адаптивный HTML-логотип (работает и в светлой, и в тёмной теме)
+# ==============================================================================
+# ФУНКЦИЯ ЛОГОТИПА
+# ==============================================================================
 def render_logo():
-    # Определяем активную тему из меню Streamlit
-    is_dark = False
-    try:
-        from streamlit_theme import st_theme
-        theme = st_theme()
-        if theme:
-            bg = theme.get('backgroundColor', '#FFFFFF')
-            rgb = [int(bg[i:i+2], 16) for i in (1, 3, 5)]
-            is_dark = (0.299*rgb[0] + 0.587*rgb[1] + 0.114*rgb[2]) < 128
-    except Exception:
-        is_dark = False
-
+    is_dark = st.session_state.dark_logo
     crescent = '#FFFFFF' if is_dark else '#6B2D9D'
     text     = '#FFFFFF' if is_dark else '#2D1B4E'
-
     st.markdown(f"""
     <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -206,7 +79,10 @@ def render_logo():
         <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="{text}">bank</text>
     </svg>
     """, unsafe_allow_html=True)
+
+# Отображаем логотип
 render_logo()
+
 st.markdown('<div class="main-header">Оперативный мониторинг показателей</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">Кликните на любой показатель для детального анализа</div>', unsafe_allow_html=True)
 st.markdown('<div class="brand-pattern"></div>', unsafe_allow_html=True)
@@ -239,7 +115,7 @@ def generate_mock_data():
 @st.cache_data(ttl=300)
 def load_data_from_view():
     try:
-        from sqlalchemy import create_engine  # импорт внутри try — не ломает демо без библиотеки
+        from sqlalchemy import create_engine
         db_user = os.getenv('DB_USER', 'dashboard_reader')
         db_pass = os.getenv('DB_PASS', 'change_me')
         db_host = os.getenv('DB_HOST', 'localhost')
@@ -265,6 +141,10 @@ df = load_data_from_view()
 # 3. БОКОВАЯ ПАНЕЛЬ И АГРЕГАЦИЯ
 # ==============================================================================
 st.sidebar.markdown("## ⚙️ Параметры отображения")
+
+# Чекбокс для тёмного логотипа
+st.sidebar.checkbox("🌙 Тёмный логотип", key="dark_logo")
+
 timeframe = st.sidebar.radio("Период агрегации:", options=["День", "Неделя", "Месяц"], index=1)
 selected_region = st.sidebar.selectbox("Регион:", options=["Все регионы"] + list(df['region'].unique()))
 
@@ -304,7 +184,6 @@ def clickable_metric(label, key):
 
     clicked = st.button(label, key=f"btn_{key}", use_container_width=True, help="Детальный анализ")
 
-    # color: inherit -> значение наследует цвет текста темы (белый/тёмный)
     st.markdown(f"""
     <div style="text-align:center; margin-top:6px;">
         <div style="font-family:'Montserrat',sans-serif; font-size:19px; font-weight:700; color:inherit; margin-bottom:2px;">
@@ -353,7 +232,6 @@ def show_detail_analysis(metric_key, metric_label):
     st.markdown("---")
     st.markdown("### Динамика показателя")
 
-    # График всегда на БЕЛОЙ подложке -> линии #6B2D9D читаемы в обеих темах
     chart_layout = dict(
         font=dict(family="Helvetica, Arial", size=12, color="#2D1B4E"),
         plot_bgcolor='white', paper_bgcolor='white',
