@@ -179,34 +179,32 @@ st.markdown("""
 # Адаптивный HTML-логотип (работает и в светлой, и в тёмной теме)
 def render_logo():
     st.markdown("""
-    <style>
-        .neo-logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 10px 0;
+    <div id="neo-logo"></div>
+    <script>
+        function updateLogo() {
+            const bgColor = getComputedStyle(document.body).backgroundColor;
+            const rgb = bgColor.match(/\d+/g);
+            const isDark = rgb && (parseInt(rgb[0]) + parseInt(rgb[1]) + parseInt(rgb[2])) < 300;
+            const crescentColor = isDark ? '#FFFFFF' : '#6B2D9D';
+            const textColor = isDark ? '#FFFFFF' : '#2D1B4E';
+            
+            document.getElementById('neo-logo').innerHTML = `
+                <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <mask id="neo-crescent">
+                            <circle cx="45" cy="40" r="35" fill="white"/>
+                            <circle cx="50" cy="40" r="35" fill="black"/>
+                        </mask>
+                    </defs>
+                    <circle cx="45" cy="40" r="35" fill="${crescentColor}" mask="url(#neo-crescent)"/>
+                    <text x="25" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="${textColor}">neo</text>
+                    <text x="95" y="52" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="${textColor}">bank</text>
+                </svg>
+            `;
         }
-        .neo-crescent {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 6px solid var(--primary-color, #6B2D9D);
-            border-top-color: transparent;
-            border-right-color: transparent;
-            flex-shrink: 0;
-        }
-        .neo-text {
-            font-family: 'Helvetica', Arial, sans-serif;
-            font-size: 32px;
-            font-weight: 400;
-            color: var(--text-color, #2D1B4E);
-            letter-spacing: -0.5px;
-        }
-    </style>
-    <div class="neo-logo-container">
-        <div class="neo-crescent"></div>
-        <div class="neo-text">neo bank</div>
-    </div>
+        updateLogo();
+        setInterval(updateLogo, 500);
+    </script>
     """, unsafe_allow_html=True)
 
 render_logo()
